@@ -5,11 +5,12 @@ import com.green.madang.manager.book.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("manager/book")
@@ -20,6 +21,10 @@ public class BookController {
     @PostMapping
     @Operation(summary = "도서 입고", description = "도서 입고 처리 API")
     public MyResponse<Integer> insBook(@RequestBody BookPostReq p) {
+        log.info("info {} ", p);
+        log.warn("warn");
+        log.error("error");
+
         int result = service.insBook(p);
         MyResponse<Integer> mr = new MyResponse<>("책 등록 완료", result);
         return mr;
@@ -41,6 +46,8 @@ public class BookController {
     }
 
     @DeleteMapping
+    @Operation(summary = "도서 삭제", description = "<div>도서 삭제 API</div>"
+                +"<div>크크크</div>")
     public MyResponse<Integer> delBook(BookDeleteReq p) {
         int result = service.delBook(p);
         MyResponse<Integer> mr = new MyResponse<>("책 삭제 완료", result);
