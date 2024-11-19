@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.madang.client.ClientMapper">
+    <insert id="postOrders">
+        INSERT INTO orders
+        (custid, bookid, saleprice, orderdate)
+        <choose>
+            <when test="discount != null and discount != ''">
+                SELECT #{custId}, bookid, price - (price * (${discount}/100)), current_date AS currentDate
+                FROM book
+                WHERE bookid = #{bookId};
+            </when>
+            <otherwise>
+                SELECT #{custId}, bookid, price, current_date AS currentDate
+                FROM book
+                WHERE bookid = #{bookId};
+            </otherwise>
+        </choose>
+    </insert>
+
+    <select id="getOrdersList">
+        SELECT A.orderId, B.bookId, B.bookName
+             , A.salePrice, A.orderDate
+          FROM orders A
+          JOIN book B
+            ON A.bookid = B.bookid
+         WHERE A.custid = #{custId}
+         ORDER BY orderid DESC;
+    </select>
+</mapper>
